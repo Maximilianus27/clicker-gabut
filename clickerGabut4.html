@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Click GBT-4</title>
+  <style type="text/css" media="all">
+    body{
+      margin: 1em;
+      padding: 0;
+      font-family: Arial;
+      background: linear-gradient(to bottom, #f7ff31, #ffffff) no-repeat;
+    }
+    .over{
+      background: linear-gradient(to bottom, crimson, #ffffff) no-repeat;
+    }
+    .container{
+      height: 30vh;
+      background: white;
+      border: black solid 2px;
+      border-bottom: black solid 5px;
+      border-radius: .5em;
+      margin-bottom: 1em;
+      padding-bottom: 2em;
+      
+      display: grid;
+      grid-template-rows: 1fr 2fr;
+    }
+    .param{
+      height: 5vh;
+      background: transparent;
+      border-radius: .4em 0 0;
+      border-bottom: black solid 2px;
+    }
+    #overheated{
+      height: 100%;
+      border-radius: .4em .4em 0 0;
+      background: #4e9cd5;
+      transition: all .5s;
+      width: 0;
+    }
+    .myWallet{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+    #wallet{
+      margin: 0;
+      font-size: 3em;
+    }
+    #wallet::after{
+      content: ",00";
+      font-size: 1rem;
+    }
+    #wallet::before{
+      content: "Rp ";
+      font-size: 1rem;
+    }
+    .myUpgrades{
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+    .myUpgrades > div{
+      border: black solid 2px;
+      border-bottom: black solid 5px;
+      border-radius: .2rem;
+      height: 5vh;
+      width: 10vw;
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      transition: all .2s;
+    }
+    .area{
+      height: 50vh;
+      background: transparent;
+      /*border: black solid 2px;*/
+      border-radius: .5em;
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #btn-up-1{background: lightblue;}
+    #btn-up-2{background: lightgreen;}
+    #btn-up-3{background: pink;}
+    #btn-up-4{background: lightyellow;}
+    
+    #btn-up-1:hover{border-bottom: black solid 2px;}
+    #btn-up-2:hover{border-bottom: black solid 2px;}
+    #btn-up-3:hover{border-bottom: black solid 2px;}
+    #btn-up-4:hover{border-bottom: black solid 2px;}
+    
+    
+    .popUp{
+      display: none;
+      height: 80vh;
+      width: 80vw;
+      background: white;
+      border: black solid 2px;
+      border-bottom: black solid 7px;
+      border-radius: .5em;
+      margin-bottom: 1em;
+      
+      position: absolute;
+      top: 10%;left: 10%;
+    }
+    .popUp #close{
+      height: 10%;
+      background: pink;
+      border-bottom: black solid 2px;
+      border-radius: .25em .25em 0 0;
+      font-size: 2em;
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .popUp #info{
+      margin: 1em;
+      font-size: 1em !important;
+      overflow-y: scroll;
+    }
+    .popUp #info #wallet{
+      font-size: 1em;
+    }
+    #heading{
+      font-size: 2em;
+      font-weight: bold;
+      border-bottom: lightgray solid 2px;
+      margin: 0;
+    }
+    #buyDecre, #buyClicker{
+      border: black solid 2px;
+      border-bottom: black solid 5px;
+      text-align: center;
+    }
+    #buyDecre p, #buyClicker p{
+      margin: 0;
+      border-bottom: black solid 1px;
+    }
+    #menuShop{
+      background: wheat;
+      border-radius: .5em;
+      padding: .1em 0;
+      color: black;
+      border: black solid 2px;
+      margin: .5em 0;
+    }
+    #menuShop > *{
+      margin: 1em;
+    }
+    .popUp #contShop{
+      height: 80%;
+      overflow: scroll;
+      display: block;
+    }
+    .popUp #contShop #contMenuShop{
+      height: 50%;
+      overflow: scroll;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="param">
+      <div id="overheated">
+        <span id="pointc"></span>
+      </div>
+    </div>
+    <div class="myWallet">
+      <p id="wallet"></p>
+    </div>
+    <div class="myUpgrades">
+      <div id="btn-up-1" onclick="info()" style="font-family:monospace;">i</div>
+      <div id="btn-up-2" onclick="up()">+</div>
+      <div id="btn-up-3" onclick="reset()">0</div>
+      <div id="btn-up-4" onmousedown="down()">-</div>
+    </div>
+  </div>
+  <div class="area">
+    <p>Click Me!</p>
+  </div>
+  <div class="popUp">
+    <div id="close" onclick="closed()">×</div>
+    <div id="info">
+      
+      <div id="contShop">
+        <p id='heading'>Shop</p>
+        Money: <span id='wallet' class="moneyShop"></span></p>
+        
+        <div id="contMenuShop">
+          <div id="menuShop">
+            <h3>Clicker</h3>
+            <p>Level: <span class="levelClicker"></span></p>
+            <p>Money/tap: +<span id='wallet'>250</span></p>
+            <div id="buyClicker">
+            <span id='wallet' class="priceClk"></span></p>
+            </div>
+          </div>
+          <div id="menuShop">
+            <h3>Decrease</h3>
+            <p>Level: <span class="levelDecreas"></span></p>
+            <p>Decrease: -<span class="decOverheat"></span></p>
+            <div id="buyDecre"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="contStatic">
+        <p id='heading'>Statistics</p>
+        <p>Wallet: <span id='wallet'></span></p>
+        <p>Level Clicker:</p>
+        <p>Money/tap: <span id='wallet'></span></p>
+        <p>Point Of Click:</p>
+      </div>
+    </div>
+  </div>
+  
+  
+  <script type="text/javascript" charset="utf-8">
+    var 
+    wallet = document.querySelector("#wallet"),
+    moneyShop = document.querySelector(".moneyShop"),
+    area = document.querySelector(".area"),
+    popUp = document.querySelector(".popUp"),
+    levelClicker = document.querySelector(".levelClicker"),
+    addClicker = document.querySelector(".addClicker"),
+    priceClk = document.querySelector(".priceClk"),
+    decOverheat = document.querySelector(".decOverheat"),
+    decLevel = document.querySelector(".levelDecreas"),
+    contStatic = document.getElementById("contStatic"),
+    contShop = document.getElementById("contShop"),
+    overheated = document.getElementById("overheated");
+
+    var
+    cash = parseInt(localStorage.getItem("money")),
+    add = parseInt(localStorage.getItem("click")),
+    decPo = parseInt(localStorage.getItem("decreas")) || 1,
+    poc = localStorage.getItem("pointOfClick") || 0,
+    priceCliker = localStorage.getItem("priceCliker"),
+    priceDecrease = 100000 || localStorage.getItem("priceDecrease"),
+    levelUpClicker = parseInt(localStorage.getItem("totalLvUp"));
+    levelUpDec = parseInt(localStorage.getItem("totalLvUpDec")) || 0;
+          
+    saveGame();
+    overheated.style.width = poc + "%";
+    
+    area.addEventListener("click", ()=>{
+      if(poc >= 100){
+        saveGame();
+        return false;
+      }
+      
+      cash += add;
+      wallet.innerText = parseInt(cashs).toLocaleString();
+      
+      poc++;
+      overheated.style.width = poc + "%";
+      overheated.innerText = poc;
+      
+      saveGame();
+      prices();
+      
+    });
+    
+    function saveGame() {
+      //Data money
+      cashs = localStorage.setItem("money", cash);
+      cashs = localStorage.getItem("money");
+      wallet.innerText = parseInt(cashs).toLocaleString() || 0;
+      walletInf = parseInt(cashs).toLocaleString() || 0;
+      
+      //Data Add clicking
+      adds = localStorage.setItem("click", add);
+      adds = parseInt(localStorage.getItem("click"));
+      
+      //Data Decrease Cooldown
+      decPos = localStorage.setItem("decreas", decPo);
+      decPos = parseInt(localStorage.getItem("decreas"));
+      
+      //Data Level Index Clicker
+      levelUpIndexSv = localStorage.setItem("totalLvUp", levelUpClicker);
+      levelUpIndexSv = localStorage.getItem("totalLvUp");
+      
+      //Data Level Index Decrease
+      levelUpDecSv = localStorage.setItem("totalLvUpDec", levelUpDec);
+      levelUpDecSv = localStorage.getItem("totallvupDec");
+      
+      //Data Price cliker
+      priceSv = localStorage.setItem("priceCliker", priceCliker);
+      priceSv = localStorage.getItem("priceCliker");
+      
+      //Data Point Of Click
+      pocSv = localStorage.setItem("pointOfClick", poc);
+      pocSv = localStorage.getItem("pointOfClick");
+      overheated.style.width = poc + "%";
+      overheated.innerText = poc;
+      
+      if(poc >= 100){
+        document.body.classList.add("over");
+        overheated.classList.add("over");
+      }else if(poc < 100){
+        document.body.classList.remove("over");
+        overheated.classList.remove("over");
+      }else if(poc <= 0){
+        poc = 0;
+      }
+      
+    }
+    
+    function info(){
+      popUp.style.display = "block";
+      contStatic.style.display = "block";
+      contShop.style.display = "none";
+      priceCliker = parseInt(priceCliker);
+      
+      contStatic.innerHTML = 
+      "<p id='heading'>Statistics</p>"+
+      "<p>Wallet: <span id='wallet'>"+walletInf+"</span></p>"+
+      "<p>Level Clicker: "+levelUpClicker+"</p>"+
+      "<p>Money/tap: <span id='wallet'>" + add.toLocaleString() + "</span></p>"+
+      "<p>Level Decrease: "+levelUpDec+"</p>"+
+      "<p>Decrease point: -"+ decPo.toLocaleString(1) +"</p>"+
+      "<p>Point Of Click: "+ poc.toLocaleString(1) +"</p>"
+      ;
+    }
+    function closed(){
+      popUp.style.display = "none";
+    }
+    
+    function reset(){
+      cash = 0;
+      add = 250;
+      levelUpClicker = 0;
+      priceCliker = 50000;
+      priceDecrease = 100000;
+      poc = 0;
+      decPo= 1;
+      levelUpDec= 0;
+      overheated.style.width = poc + "%";
+      overheated.innerText = poc;
+          
+      saveGame();
+      info();
+    }
+    
+    function up(){
+      prices();
+      
+      popUp.style.display = "block";
+      contShop.style.display = "block";
+      contStatic.style.display = "none";
+      var buyUpC = document.getElementById("buyClicker");
+      var buyUpD = document.getElementById("buyDecre");
+      
+      moneyShop.innerText = parseInt(cashs).toLocaleString();
+      levelClicker.innerText = levelUpClicker.toLocaleString();
+      //addClicker.innerText = add.toLocaleString();
+      decLevel.innerText = levelUpDec.toLocaleString();
+      decOverheat.innerText = decPo;
+      
+      if(cash <= priceCliker){
+        buyUpC.innerHTML = "<p id='wallet'>"+priceCliker.toLocaleString()+"</p>"+"<p>Maaf, uang anda tidak cukup</p>";
+      }else{
+        buyUpC.innerHTML = "<p>UPGRADE</p>"
+        buyUpC.addEventListener("click", upgradeClicker);
+        saveGame();
+      }
+      
+      if(cash <= priceDecrease){
+        buyUpD.innerHTML = "<p id='wallet'>"+priceDecrease.toLocaleString()+"</p>"+"<p>Maaf, uang anda tidak cukup</p>";
+      }else{
+        buyUpD.innerHTML = "<p>UPGRADE</p>"
+        buyUpD.addEventListener("click", upgradeDecre);
+        saveGame();
+      }
+      
+      saveGame();
+    }
+    
+    function upgradeClicker(){
+      add += 250;
+      levelUpClicker++;
+      
+      cash -= priceCliker;
+      saveGame();
+      prices();
+      up();
+    }
+    
+    function upgradeDecre(){
+      levelUpDec++
+      decPo++
+      cash -= priceDecrease;
+      
+      saveGame();
+      prices();
+      up();
+    }
+     
+    function down(){
+      if(poc <= 0){
+        poc = 0;
+        return false;
+      }
+      //decPo = 2;
+      poc-=decPo;
+      overheated.style.width = poc + "%";
+      overheated.innerText = poc;
+      
+      saveGame();
+    }
+    
+    function prices(){
+      if(levelUpDec >= 1){
+        priceDecrease = 250000;
+      }
+      if(levelUpDec >= 2){
+        priceDecrease = 500000;
+      }
+      if(levelUpDec >= 3){
+        priceDecrease = 1000000;
+      }
+      
+      if(levelUpClicker >= 3){
+        priceCliker = 150000;
+      }
+      if(levelUpClicker >= 6){
+        priceCliker = 300000;
+      }
+      if(levelUpClicker >= 9){
+        priceCliker = 468000;
+      }
+      
+      
+    }
+  </script>
+</body>
+</html>
